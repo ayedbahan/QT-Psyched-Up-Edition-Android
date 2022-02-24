@@ -52,7 +52,7 @@ class MusicBeatState extends FlxUIState
 	public function addVirtualPad(?DPad, ?Action)
 	#end
 
-	public function addAndroidControls(hasdodge:Bool = false) {
+	public function addAndroidControls() {
 		#if android
 		androidc = new AndroidControls();
 
@@ -78,7 +78,7 @@ class MusicBeatState extends FlxUIState
 		androidc.visible = false;
 		add(androidc);
 
-                if (hasdodge)
+                if (SONG.dodgeEnabled)
                 {
                         _virtualpad = new FlxVirtualPad(NONE, D);
 		        _virtualpad.alpha = 0.75;
