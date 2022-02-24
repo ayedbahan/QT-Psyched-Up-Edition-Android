@@ -15,7 +15,7 @@ import flixel.FlxState;
 import flixel.FlxBasic;
 #if android
 import flixel.input.actions.FlxActionInput;
-import android.AndroidControls.AndroidControlsSetup;
+import android.AndroidControls.AndroidControls;
 import android.FlxVirtualPad;
 #end
 
