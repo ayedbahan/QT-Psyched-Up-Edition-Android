@@ -8,9 +8,9 @@ import flixel.text.FlxText;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import haxe.Json;
-import androidcontrols.Hitbox;
-import androidcontrols.AndroidControls.Config;
-import androidcontrols.FlxVirtualPad;
+import android.Hitbox;
+import android.AndroidControls.Config;
+import android.FlxVirtualPad;
 
 using StringTools;
 
