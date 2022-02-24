@@ -158,6 +158,6 @@ enum ControlsGroup {
 	VIRTUALPAD_LEFT;
         VIRTUALPAD_CUSTOM;
         DUO;
-	KEYBOARD;
 	HITBOX;
+	KEYBOARD;
 }
