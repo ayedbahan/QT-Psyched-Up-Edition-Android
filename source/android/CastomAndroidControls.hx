@@ -56,7 +56,7 @@ class CastomAndroidControls extends MusicBeatState
 
                 var exitbutton = new FlxButton(FlxG.width - 200, 50, "Exit", function()
                 {
-			FlxG.switchState(new OptionsMenu());
+			MusicBeatState.switchState(new options.OptionsState());
 		});
 		exitbutton.setGraphicSize(Std.int(exitbutton.width) * 3);
                 exitbutton.label.setFormat(null, 16, 0x333333, "center");
@@ -66,7 +66,7 @@ class CastomAndroidControls extends MusicBeatState
 		var savebutton = new FlxButton(exitbutton.x, exitbutton.y + 100, "Save", function()
 		{
 			save();
-			FlxG.switchState(new OptionsMenu());
+			MusicBeatState.switchState(new options.OptionsState());
 		});
 		savebutton.setGraphicSize(Std.int(savebutton.width) * 3);
                 savebutton.label.setFormat(null, 16, 0x333333, "center");
