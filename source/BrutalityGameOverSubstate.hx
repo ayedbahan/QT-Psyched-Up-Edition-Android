@@ -130,6 +130,9 @@ class BrutalityGameOverSubstate extends MusicBeatSubstate
 			FlxG.sound.playMusic(Paths.music(loopSoundName), 0);
 			musicplaying=true;
 		});
+
+                addVirtualPad(NONE, A_B);
+                addPadCamera();
 	}
 
 	override function update(elapsed:Float)
