@@ -5,8 +5,8 @@ import flixel.group.FlxSpriteGroup;
 import flixel.util.FlxSave;
 import flixel.math.FlxPoint;
 
-import androidcontrols.FlxVirtualPad;
-import androidcontrols.Hitbox;
+import android.FlxVirtualPad;
+import android.Hitbox;
 
 class Config {
 	var save:FlxSave;
