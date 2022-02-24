@@ -78,7 +78,7 @@ class MusicBeatState extends FlxUIState
 		androidc.visible = false;
 		add(androidc);
 
-                if (SONG.dodgeEnabled)
+                if (PlayState.SONG.dodgeEnabled)
                 {
                         _virtualpad = new FlxVirtualPad(NONE, D);
 		        _virtualpad.alpha = 0.75;
