@@ -2953,7 +2953,7 @@ class PlayState extends MusicBeatState
 		}
 
 
-		if (controls.PAUSE #if android || FlxG.android.justPressed.BACK #end) //Modified so that enter can skip the thanks for playing screen.
+		if (controls.PAUSE #if android || FlxG.android.justRelesed.BACK #end) //Modified so that enter can skip the thanks for playing screen.
 		{
 			if(startedCountdown && canPause){
 				var ret:Dynamic = callOnLuas('onPause', []);
