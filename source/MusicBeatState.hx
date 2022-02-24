@@ -80,7 +80,11 @@ class MusicBeatState extends FlxUIState
 
                 if (PlayState.SONG.dodgeEnabled)
                 {
-                        _virtualpad = new FlxVirtualPad(NONE, D);
+                        if (androidc.mode == HITBOX) {
+                                _virtualpad = new FlxVirtualPad(NONE, D);
+                        } else {
+                                _virtualpad = new FlxVirtualPad(NONE, A);
+                        }
 		        _virtualpad.alpha = 0.75;
                         _virtualpad.cameras = [camcontrol];
                         _virtualpad.visible = false;
