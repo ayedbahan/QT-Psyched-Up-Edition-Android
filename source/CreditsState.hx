@@ -80,6 +80,8 @@ class CreditsState extends MusicBeatState
 		#end
 
 		var pisspoop:Array<Array<String>> = [ //Name - Icon name - Description - Link - BG Color
+			['Android Port'],
+			['Saw (M.A. Jigsaw)','saw','Main Coder','https://www.youtube.com/channel/UC2Sk7vtPzOvbVzdVTWrribQ','F73838'],
 			['QT Mod Team'],
 			['Hazard24',			'hazard',			'Programming, Music, Charting, Animation, SFX',			'https://twitter.com/Hazard248',		'FFD402'],
 			['CountNightshade',		'nightshade',		'Art, Character Design',								'https://twitter.com/CountNightshade',	'9930BB'],
