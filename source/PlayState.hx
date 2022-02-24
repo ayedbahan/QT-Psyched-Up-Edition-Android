@@ -5595,7 +5595,7 @@ class PlayState extends MusicBeatState
 	{
 		if(SONG.dodgeEnabled){
 			// FlxG.keys.justPressed.SPACE
-			if(FlxG.keys.anyJustPressed(dodgeKey) #if android || _virtualpad.buttonD.justPressed #end && !bfDodging && bfCanDodge){
+			if(FlxG.keys.anyJustPressed(dodgeKey) #if android || _virtualpad.buttonD.justPressed || _virtualpad.buttonA.justPressed #end && !bfDodging && bfCanDodge){
 				bfDodge();
 			}
 		}
