@@ -50,6 +50,7 @@ class CastomAndroidControls extends MusicBeatState
 
 		menuBG = new FlxSprite().loadGraphic(Paths.image('androidcontrols/menu/menuBG'));
 		menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
+                menuBG.color = 0xFFea71fd;
 		menuBG.updateHitbox();
 		menuBG.screenCenter();
 		add(menuBG);
@@ -161,8 +162,11 @@ class CastomAndroidControls extends MusicBeatState
 					_pad.alpha = 0.75;
 					add(_pad);
 				case 'VIRTUALPAD_CUSTOM':
-					add(_pad);
+					remove(_pad);
+					_pad = null;
+					_pad = new FlxVirtualPad(RIGHT_FULL, NONE);
 					_pad.alpha = 0.75;
+					add(_pad);
 					loadcustom();
 				case 'DUO':
 					remove(_pad);
@@ -171,36 +175,35 @@ class CastomAndroidControls extends MusicBeatState
 					_pad.alpha = 0.75;
 					add(_pad);
 				case 'HITBOX':
-					_pad.alpha = 0;
-				case 'KEYBOARD':
+					_pad.alpha = 0;                         
+				case 'KEYBOARD':                     
 					remove(_pad);
 					_pad.alpha = 0;
 			}
 
-			if (daChoice == "HITBOX")
+                        if (daChoice != "HITBOX")
 			{
-				_hb.visible = true;
-				upPozition.visible = false;
-				downPozition.visible = false;
-				leftPozition.visible = false;
-				rightPozition.visible = false;
+		                _hb.visible = false;
 			}
-			else if (daChoice == "KEYBOARD")
+                        else
+                        {
+				_hb.visible = true;
+                        }
+
+			if (daChoice != "VIRTUALPAD_CUSTOM")
 			{
-				_hb.visible = false;
-				upPozition.visible = false;
+		                upPozition.visible = false;
 				downPozition.visible = false;
 				leftPozition.visible = false;
 				rightPozition.visible = false;
 			}
                         else
-			{
-				_hb.visible = false;
+                        {
 				upPozition.visible = true;
 				downPozition.visible = true;
 				leftPozition.visible = true;
 				rightPozition.visible = true;
-			}
+                        }
 	}
 
 	function trackbutton(touch:flixel.input.touch.FlxTouch){
