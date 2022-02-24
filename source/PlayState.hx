@@ -1374,6 +1374,8 @@ class PlayState extends MusicBeatState
 		timeTxt.cameras = [camHUD];
 		doof.cameras = [camHUD];
 
+                addAndroidControls(SONG.dodgeEnabled);
+
 		// if (SONG.song == 'South')
 		// FlxG.camera.alpha = 0.7;
 		// UI_camera.zoom = 1;
@@ -2036,6 +2038,13 @@ class PlayState extends MusicBeatState
 		inCutscene = false;
 		var ret:Dynamic = callOnLuas('onStartCountdown', []);
 		if(ret != FunkinLua.Function_Stop) {
+                        #if android
+                        androidc.visible = true;
+                        if (SONG.dodgeEnabled)
+                        {
+                                _virtualpad.visible = true;
+                        }
+                        #end
 			generateStaticArrows(0);
 			generateStaticArrows(1);
 			for (i in 0...playerStrums.length) {
@@ -4918,7 +4927,7 @@ class PlayState extends MusicBeatState
 				inCutscene = true;
 				camZooming = false;
 				endingCutsceneDone=true;
-				dialogueJson = DialogueBoxPsych.parseDialogue(file);
+				dialogueJson = DialogueBoxPsych.parseDialogue(SUtil.getPath() + file);
 				startDialogue(dialogueJson);
 			}else{
 				//trace("endSong triggerd from start ending dialogue");
@@ -5023,6 +5032,13 @@ class PlayState extends MusicBeatState
 			}
 		}
 		
+                #if android
+                androidc.visible = true;
+                if (SONG.dodgeEnabled)
+                {
+                         _virtualpad.visible = true;
+                }
+                #end
 		timeBarBG.visible = false;
 		timeBar.visible = false;
 		timeTxt.visible = false;
@@ -5579,7 +5595,7 @@ class PlayState extends MusicBeatState
 	{
 		if(SONG.dodgeEnabled){
 			// FlxG.keys.justPressed.SPACE
-			if(FlxG.keys.anyJustPressed(dodgeKey) && !bfDodging && bfCanDodge){
+			if(FlxG.keys.anyJustPressed(dodgeKey) #if android || _virtualpad.buttonD.justPressed #end && !bfDodging && bfCanDodge){
 				bfDodge();
 			}
 		}
