@@ -303,7 +303,7 @@ class PlayState extends MusicBeatState
 	var discordDifficultyOverrideShouldUse:Bool = false;
 	var discordDifficultyOverride:String = "???";
 	var eyeSeeU:Bool = false;
-	var inhumanSong:Bool = false;
+	public static var inhumanSong:Bool = false;
 	var disableDefaultCamZooming:Bool = false;
 	var disableArrowIntro:Bool = false;
 	var forceMiddleScroll:Bool = false;
