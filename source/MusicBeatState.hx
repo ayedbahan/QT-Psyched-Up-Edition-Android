@@ -86,7 +86,7 @@ class MusicBeatState extends FlxUIState
                         _virtualpad.visible = false;
 		        add(_virtualpad);
                 }
-                else
+                else if (!PlayState.inhumanSong)
                 {
                         _virtualpad = new FlxVirtualPad(NONE, B);
 		        _virtualpad.alpha = 0.75;
