@@ -55,6 +55,12 @@ class CastomAndroidControls extends MusicBeatState
 		menuBG.screenCenter();
 		add(menuBG);
 
+		var titleText:Alphabet = new Alphabet(0, 0, "Android Controls", true, false, 0, 0.6);
+		titleText.x += 60;
+		titleText.y += 40;
+		titleText.alpha = 0.4;
+		add(titleText);
+
 		_pad = new FlxVirtualPad(RIGHT_FULL, NONE);
 		_pad.alpha = 0;
 		add(_pad);
