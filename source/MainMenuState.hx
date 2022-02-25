@@ -135,7 +135,7 @@ class MainMenuState extends MusicBeatState
 		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(versionShit);
 
-		var qtVersion:FlxText = new FlxText(FlxG.width-250, FlxG.height - 24, 0 , "QT Mod Version - v2.1",12);
+		var qtVersion:FlxText = new FlxText(FlxG.width-245, FlxG.height - 24, 0 , "QT Mod Version - v2.1",12);
 		qtVersion.scrollFactor.set();
 		qtVersion.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(qtVersion);
