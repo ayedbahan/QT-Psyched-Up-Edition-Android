@@ -82,7 +82,7 @@ class CastomAndroidControls extends MusicBeatState
 		savebutton.color = FlxColor.fromRGB(0,255,0);
 		add(savebutton);
 
-		inputvari = new FlxText(0, 50, 0, controlitems[curSelected], 32);
+		inputvari = new FlxText(0, 50, 0, controlitems[curSelected], 48);
 		inputvari.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
                 inputvari.screenCenter(X);
 		inputvari.borderSize = 2.4;
@@ -90,7 +90,7 @@ class CastomAndroidControls extends MusicBeatState
 
 		var ui_tex = Paths.getSparrowAtlas('androidcontrols/menu/arrows');//thanks Andromeda Engine
 
-		leftArrow = new FlxSprite(inputvari.x - 60, inputvari.y);
+		leftArrow = new FlxSprite(inputvari.x - 60, inputvari.y - 10);
 		leftArrow.frames = ui_tex;
 		leftArrow.animation.addByPrefix('idle', "arrow left");
 		leftArrow.animation.addByPrefix('press', "arrow push left");
