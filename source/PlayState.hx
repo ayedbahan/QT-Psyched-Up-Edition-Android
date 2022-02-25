@@ -1373,8 +1373,8 @@ class PlayState extends MusicBeatState
 		timeBarBG.cameras = [camHUD];
 		timeTxt.cameras = [camHUD];
 		doof.cameras = [camHUD];
-
-                addAndroidControls();
+		
+		addAndroidControls();
 
 		// if (SONG.song == 'South')
 		// FlxG.camera.alpha = 0.7;
@@ -1699,7 +1699,7 @@ class PlayState extends MusicBeatState
 			luaFile = Paths.modFolders(luaFile);
 			doPush = true;
 		} else {
-			luaFile = SUtil.getPath() + Paths.getPreloadPath(luaFile);
+			luaFile = Paths.getPreloadPath(luaFile);
 			if(FileSystem.exists(luaFile)) {
 				doPush = true;
 			}
@@ -1833,7 +1833,7 @@ class PlayState extends MusicBeatState
 		#end
 
 		if(!foundFile) {
-			fileName = SUtil.getPath() + Paths.video(name);
+			fileName = Paths.video(name);
 			#if sys
 			if(FileSystem.exists(fileName)) {
 			#else
@@ -2038,13 +2038,13 @@ class PlayState extends MusicBeatState
 		inCutscene = false;
 		var ret:Dynamic = callOnLuas('onStartCountdown', []);
 		if(ret != FunkinLua.Function_Stop) {
-                        #if android
-                        androidc.visible = true;
-                        if (SONG.dodgeEnabled)
-                        {
-                                _virtualpad.visible = true;
-                        }
-                        #end
+	        #if android
+            androidc.visible = true;
+            if (SONG.dodgeEnabled)
+            {
+                _virtualpad.visible = true;
+            }
+            #end
 			generateStaticArrows(0);
 			generateStaticArrows(1);
 			for (i in 0...playerStrums.length) {
@@ -2502,6 +2502,23 @@ class PlayState extends MusicBeatState
 
 	function eventPushed(event:Array<Dynamic>) {
 		switch(event[1]) {
+			case 'Change Character OPTIONAL':
+				if(!ClientPrefs.lowQuality){
+					var charType:Int = 0;
+					switch(event[2].toLowerCase()) {
+						case 'gf' | 'girlfriend' | '1':
+							charType = 2;
+						case 'dad' | 'opponent' | '0':
+							charType = 1;
+						default:
+							charType = Std.parseInt(event[2]);
+							if(Math.isNaN(charType)) charType = 0;
+					}
+
+					var newCharacter:String = event[3];
+					addCharacterToList(newCharacter, charType);
+				}
+
 			case 'Change Character':
 				var charType:Int = 0;
 				switch(event[2].toLowerCase()) {
@@ -3396,8 +3413,9 @@ class PlayState extends MusicBeatState
 			if(wack){
 				var horror:FlxSprite;
 				var wack:Int = FlxG.random.int(1,8);
-				if(Achievements.achievementsMap.exists(Achievements.achievementsStuff[5][2])){ //If you can access Interlope, allows for the Interlope hint to be shown.
-					wack = FlxG.random.int(1,11);
+				//Update v2.1, Interlope screen is 100% now after Cessation. Will be like this until you've beaten Interlope.
+				if(!Achievements.achievementsMap.exists(Achievements.achievementsStuff[10][2]) && Achievements.achievementsMap.exists(Achievements.achievementsStuff[5][2])){ //If you can access Interlope, allows for the Interlope hint to be shown.
+					wack = 100;
 				}
 				switch(wack)
 				{
@@ -3415,7 +3433,7 @@ class PlayState extends MusicBeatState
 						horror = new FlxSprite(-80).loadGraphic(Paths.image('hazard/qt-port/stage/topsecretfolder/DoNotLook/horrorSecret07'));
 					case 8:
 						horror = new FlxSprite(-80).loadGraphic(Paths.image('hazard/qt-port/stage/topsecretfolder/DoNotLook/horrorSecret08'));
-					case 9 | 10 | 11: //Much more likely to show
+					case 100: //Interlope secret screen
 						horror = new FlxSprite(-80).loadGraphic(Paths.image('hazard/qt-port/stage/topsecretfolder/DoNotLook/horrorSecretInterlope'));
 					default:
 						horror = new FlxSprite(-80).loadGraphic(Paths.image('hazard/qt-port/stage/topsecretfolder/DoNotLook/horrorSecret01'));
@@ -3560,8 +3578,8 @@ class PlayState extends MusicBeatState
 			kb_attack_saw.animation.play('fire');
 			kb_attack_saw.offset.set(1600,0);
 
-			FlxG.camera.shake(0.00165,0.6);
-			camHUD.shake(0.00165,0.2);
+			FlxG.camera.shake(0.001675,0.6);
+			camHUD.shake(0.001675,0.2);
 
 			if(cpuControlled) bfDodge();
 
@@ -3572,37 +3590,13 @@ class PlayState extends MusicBeatState
 					if(!godMode){
 						sawbladeHits ++;
 						trace("sawbladeHits: ",sawbladeHits);
-					}
 
-					//Classic Termination sawblade which instakill.
-					//After 4th sawblade, will guarantee an instakill.
-					//if((instaKill || sawbladeHits > 4 || (storyDifficulty==2 && SONG.song.toLowerCase() == "termination")) && !godMode){
-					if(!godMode && (instaKill || sawbladeHits > 3 || (storyDifficulty==2 && SONG.song.toLowerCase() == "termination"))){
-						//MURDER THE BITCH!
-						trace("Instakill sawblade missed");
-						health -= 404;
-						causeOfDeath = "sawblade";
-						#if ACHIEVEMENTS_ALLOWED
-						Achievements.sawbladeDeath++;
-						FlxG.save.data.sawbladeDeath = Achievements.sawbladeDeath;
-						var achieve:String = checkForAchievement(['sawblade_death']);
-						if (achieve != null) {
-							startAchievement(achieve);
-						} else {
-							FlxG.save.flush();
-						}
-						FlxG.log.add('ClassicBonks: ' + Achievements.sawbladeDeath);
-						#end
-					}else{
-						if(!godMode){
-							health -= 0.275;
-							if(health >= maxHealth+0.5125){
-								maxHealth = maxHealth+0.5125;
-								reduceMaxHealth();
-							}
-						}
-						//mmmmm I loved scuffed code. But it works!
-						if(health < maxHealth && !godMode){
+						//Classic Termination sawblade which instakill.
+						//After 3rd sawblade, will guarantee an instakill.
+						if((instaKill || sawbladeHits > 3 || (storyDifficulty==2 && SONG.song.toLowerCase() == "termination"))){
+							//MURDER THE BITCH!
+							trace("Instakill sawblade missed");
+							health -= 404;
 							causeOfDeath = "sawblade";
 							#if ACHIEVEMENTS_ALLOWED
 							Achievements.sawbladeDeath++;
@@ -3613,22 +3607,45 @@ class PlayState extends MusicBeatState
 							} else {
 								FlxG.save.flush();
 							}
-							FlxG.log.add('Bonks: ' + Achievements.sawbladeDeath);
+							FlxG.log.add('ClassicBonks: ' + Achievements.sawbladeDeath);
 							#end
 						}else{
-							//Done so that the sound doesn't play if the sawblade would've killed the player.
-							if(ClientPrefs.qtBonk)
-								FlxG.sound.play(Paths.sound('bonk'),1); //This is fucking amazing.
-							else
-								FlxG.sound.play(Paths.sound('hazard/sawbladeHit'),1); //Ouch
+							health -= 0.265;
+							if(health >= maxHealth+0.51125){
+								maxHealth = maxHealth+0.51125;
+								reduceMaxHealth();
+								//Only reduce max health if possible. This is here to hopefully avoid a crash with the regerneating the bar or something.
+							}
+							//mmmmm I loved scuffed code. But it works!
+							if(health < maxHealth){ //If the health is too low after the sawblade, sawblade kills you.
+								health -= 404; 		//v2.1, I forgot to add this line of code so errr, now sawblades actually kill you again :D
+								causeOfDeath = "sawblade";
+								#if ACHIEVEMENTS_ALLOWED
+								Achievements.sawbladeDeath++;
+								FlxG.save.data.sawbladeDeath = Achievements.sawbladeDeath;
+								var achieve:String = checkForAchievement(['sawblade_death']);
+								if (achieve != null) {
+									startAchievement(achieve);
+								} else {
+									FlxG.save.flush();
+								}
+								FlxG.log.add('Bonks: ' + Achievements.sawbladeDeath);
+								#end
+							}else{
+								//Done so that the sound doesn't play if the sawblade would've killed the player.
+								if(ClientPrefs.qtBonk)
+									FlxG.sound.play(Paths.sound('bonk'),1); //This is fucking amazing.
+								else
+									FlxG.sound.play(Paths.sound('hazard/sawbladeHit'),1); //Ouch
+							}
+							boyfriend.stunned=true;
+							boyfriend.playAnim('hurt',true);
+							new FlxTimer().start(0.495, function(tmr:FlxTimer)
+							{
+								boyfriend.stunned=false;
+								//trace("Not fucked anymore?");
+							});
 						}
-						boyfriend.stunned=true;
-						boyfriend.playAnim('hurt',true);
-						new FlxTimer().start(0.495, function(tmr:FlxTimer)
-						{
-							boyfriend.stunned=false;
-							//trace("Not fucked anymore?");
-						});
 					}
 				}
 			});
@@ -4748,6 +4765,72 @@ class PlayState extends MusicBeatState
 					}
 				}
 
+			//V2.1, made it so the the change character event is completely skipped when in low quality. Kept the original event if somebody had a song where the character change is actually important.
+			case 'Change Character OPTIONAL':
+				if(!ClientPrefs.lowQuality){
+					var charType:Int = 0;
+					switch(value1) {
+						case 'gf' | 'girlfriend':
+							charType = 2;
+						case 'dad' | 'opponent':
+							charType = 1;
+						default:
+							charType = Std.parseInt(value1);
+							if(Math.isNaN(charType)) charType = 0;
+					}
+
+					switch(charType) {
+						case 0:
+							if(boyfriend.curCharacter != value2) {
+								if(!boyfriendMap.exists(value2)) {
+									addCharacterToList(value2, charType);
+								}
+
+								var lastAlpha:Float = boyfriend.alpha;
+								boyfriend.alpha = 0.00001;
+								boyfriend = boyfriendMap.get(value2);
+								boyfriend.alpha = lastAlpha;
+								iconP1.changeIcon(boyfriend.healthIcon);
+							}
+							setOnLuas('boyfriendName', boyfriend.curCharacter);
+
+						case 1:
+							if(dad.curCharacter != value2) {
+								if(!dadMap.exists(value2)) {
+									addCharacterToList(value2, charType);
+								}
+
+								var wasGf:Bool = dad.curCharacter.startsWith('gf');
+								var lastAlpha:Float = dad.alpha;
+								dad.alpha = 0.00001;
+								dad = dadMap.get(value2);
+								if(!dad.curCharacter.startsWith('gf')) {
+									if(wasGf) {
+										gf.visible = true;
+									}
+								} else {
+									gf.visible = false;
+								}
+								dad.alpha = lastAlpha;
+								iconP2.changeIcon(dad.healthIcon);
+							}
+							setOnLuas('dadName', dad.curCharacter);
+
+						case 2:
+							if(gf.curCharacter != value2) {
+								if(!gfMap.exists(value2)) {
+									addCharacterToList(value2, charType);
+								}
+
+								var lastAlpha:Float = gf.alpha;
+								gf.alpha = 0.00001;
+								gf = gfMap.get(value2);
+								gf.alpha = lastAlpha;
+							}
+							setOnLuas('gfName', gf.curCharacter);
+					}
+					reloadHealthBarColors();
+				}
 
 			case 'Change Character':
 				var charType:Int = 0;
@@ -5032,13 +5115,14 @@ class PlayState extends MusicBeatState
 			}
 		}
 		
-                #if android
-                androidc.visible = true;
-                if (SONG.dodgeEnabled)
-                {
-                         _virtualpad.visible = true;
-                }
-                #end
+		#if android
+        androidc.visible = false;
+        if (SONG.dodgeEnabled)
+        {
+            _virtualpad.visible = false;
+        }
+        #end
+		
 		timeBarBG.visible = false;
 		timeBar.visible = false;
 		timeTxt.visible = false;
@@ -5779,63 +5863,63 @@ class PlayState extends MusicBeatState
 			if(health - dadDrainHealth - 0.1 > maxHealth){
 				if(sawbladeHits > 3){
 					health -= dadDrainHealth/3.15; //At this point, just constantly nerf the opponent.
-					trace("+3 - You're completely fucked.");
+					//trace("+3 - You're completely fucked.");
 				}else{
 					switch(sawbladeHits){
 						case 0:
 							if(health < 1.35){
 								if(health < 0.8){
-									trace("0 - AWWW SHIT");
+									//trace("0 - AWWW SHIT");
 									health -= dadDrainHealth/3; //Massively nerfs the amount of health Opponent can recover if over halfway to give the player more room to breath health-wise.
 								}else{
-									trace("0 - fuck you, you're above halfway now");
+									//trace("0 - fuck you, you're above halfway now");
 									health -= dadDrainHealth/1.75; //nerfs the amount of health Opponent can recover if over halfway to give the player more room to breath health-wise.
 								}
 							}else{
-								trace("0 - Nah, no nerfing just yet");
+								//trace("0 - Nah, no nerfing just yet");
 								health -= dadDrainHealth;
 							}
 						case 1:
 							if(health < 1.5){
 								if(health < 1){
-									trace("1 - AWWW SHIT");
+									//trace("1 - AWWW SHIT");
 									health -= dadDrainHealth/3; //Massively nerfs the amount of health Opponent can recover if over halfway to give the player more room to breath health-wise.
 								}else{
-									trace("1 - fuck you, you're above halfway now");
+									//trace("1 - fuck you, you're above halfway now");
 									health -= dadDrainHealth/1.77; //nerfs the amount of health Opponent can recover if over halfway to give the player more room to breath health-wise.
 								}
 							}else{
-								trace("1 - Nah, no nerfing just yet");
+								//trace("1 - Nah, no nerfing just yet");
 								health -= dadDrainHealth;
 							}
 						case 2:
 							if(health < 1.8125){
 								if(health < 1.45){
-									trace("2 - AWWW SHIT");
+									//trace("2 - AWWW SHIT");
 									health -= dadDrainHealth/3.1; //Massively nerfs the amount of health Opponent can recover if over halfway to give the player more room to breath health-wise.
 								}else{
-									trace("2 - fuck you, you're above halfway now");
+									//trace("2 - fuck you, you're above halfway now");
 									health -= dadDrainHealth/2; //nerfs the amount of health Opponent can recover if over halfway to give the player more room to breath health-wise.
 								}
 							}else{
-								trace("2 - Nah, no nerfing just yet");
+								//trace("2 - Nah, no nerfing just yet");
 								health -= dadDrainHealth;
 							}
 						case 3:
-							if(health < 1.81){
-								trace("3 - AWWW SHIT");
-								health -= dadDrainHealth/3.2; //Massively nerfs the amount of health Opponent can recover if over halfway to give the player more room to breath health-wise.
+							if(health < 1.82){
+								//trace("3 - AWWW SHIT");
+								health -= dadDrainHealth/3.3; //Massively nerfs the amount of health Opponent can recover if over halfway to give the player more room to breath health-wise.
 							}else{
-								trace("3 - fuck you, you're above halfway now");
-								health -= dadDrainHealth/2.35; //nerfs the amount of health Opponent can recover if over halfway to give the player more room to breath health-wise.
+								//trace("3 - fuck you, you're above halfway now");
+								health -= dadDrainHealth/2.4; //nerfs the amount of health Opponent can recover if over halfway to give the player more room to breath health-wise.
 							}
 						default:
 							//This shouldn't trigger in normal circumstances.
 							if(health < 1.6){
-								trace("DEFAULT - AWWW SHIT");
+								//trace("DEFAULT - AWWW SHIT");
 								health -= dadDrainHealth/3; //Massively nerfs the amount of health Opponent can recover if over halfway to give the player more room to breath health-wise.
 							}else{
-								trace("DEFAULT - fuck you, you're above halfway now");
+								//trace("DEFAULT - fuck you, you're above halfway now");
 								health -= dadDrainHealth/1.5; //nerfs the amount of health Opponent can recover if over halfway to give the player more room to breath health-wise.
 							}
 					}
@@ -6444,7 +6528,7 @@ class PlayState extends MusicBeatState
 			case 'interlope':
 				if((curBeat >= 448 && curBeat < 510) || (curBeat >= 512 && curBeat < 574) || (curBeat >= 575 && curBeat < 640))
 				{
-					if(camZooming && FlxG.camera.zoom < 1.35)
+					if(camZooming && FlxG.camera.zoom < 1.35 && ClientPrefs.camZooms)
 					{
 						FlxG.camera.zoom += 0.0075;
 						camHUD.zoom += 0.015;
@@ -6453,7 +6537,7 @@ class PlayState extends MusicBeatState
 			case 'termination':
 				if(curBeat >= 192 && curBeat <= 320) //1st drop
 				{
-					if(camZooming && FlxG.camera.zoom < 1.35)
+					if(camZooming && FlxG.camera.zoom < 1.35 && ClientPrefs.camZooms)
 					{
 						FlxG.camera.zoom += 0.0075;
 						camHUD.zoom += 0.015;
@@ -6461,7 +6545,7 @@ class PlayState extends MusicBeatState
 				}
 				else if(curBeat >= 512 && curBeat <= 640) //1st drop
 				{
-					if(camZooming && FlxG.camera.zoom < 1.35)
+					if(camZooming && FlxG.camera.zoom < 1.35 && ClientPrefs.camZooms)
 					{
 						FlxG.camera.zoom += 0.0075;
 						camHUD.zoom += 0.015;
@@ -6469,7 +6553,7 @@ class PlayState extends MusicBeatState
 				}
 				else if(curBeat >= 832 && curBeat <= 1088) //last drop
 				{
-					if(camZooming && FlxG.camera.zoom < 1.35)
+					if(camZooming && FlxG.camera.zoom < 1.35 && ClientPrefs.camZooms)
 					{
 						FlxG.camera.zoom += 0.0075;
 						camHUD.zoom += 0.015;
@@ -6487,7 +6571,7 @@ class PlayState extends MusicBeatState
 				}
 				else if(curBeat >= 304 && curBeat <= 432) //second drop
 				{
-					if(camZooming && FlxG.camera.zoom < 1.35)
+					if(camZooming && FlxG.camera.zoom < 1.35 && ClientPrefs.camZooms)
 					{
 						FlxG.camera.zoom += 0.0075;
 						camHUD.zoom += 0.015;
@@ -6501,7 +6585,7 @@ class PlayState extends MusicBeatState
 					}
 				}
 				else if(curBeat >= 560 && curBeat <= 688){ //third drop
-					if(camZooming && FlxG.camera.zoom < 1.35)
+					if(camZooming && FlxG.camera.zoom < 1.35 && ClientPrefs.camZooms)
 					{
 						FlxG.camera.zoom += 0.0075;
 						camHUD.zoom += 0.015;
@@ -6514,7 +6598,7 @@ class PlayState extends MusicBeatState
 					}
 				}
 				else if(curBeat >= 832 && curBeat <= 960){ //final drop
-					if(camZooming && FlxG.camera.zoom < 1.35)
+					if(camZooming && FlxG.camera.zoom < 1.35 && ClientPrefs.camZooms)
 					{
 						FlxG.camera.zoom += 0.0075;
 						camHUD.zoom += 0.015;
@@ -6527,7 +6611,7 @@ class PlayState extends MusicBeatState
 						qt_gas02.animation.play('burstFAST');
 					}
 				}
-				else if((curBeat == 976 || curBeat == 992) && camZooming && FlxG.camera.zoom < 1.35){ //Extra zooms for distorted kicks at end
+				else if((curBeat == 976 || curBeat == 992) && camZooming && FlxG.camera.zoom < 1.35 && ClientPrefs.camZooms){ //Extra zooms for distorted kicks at end
 					FlxG.camera.zoom += 0.031;
 					camHUD.zoom += 0.062;
 				}else if(curBeat == 702 && !ClientPrefs.lowQuality){
