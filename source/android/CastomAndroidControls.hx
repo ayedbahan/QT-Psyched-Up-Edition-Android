@@ -24,7 +24,7 @@ class CastomAndroidControls extends MusicBeatState
 	var leftPozition:FlxText;
 	var rightPozition:FlxText;
 
-	var inputvari:Alphabet;
+	var inputvari:FlxText;
 
 	var leftArrow:FlxSprite;
 	var rightArrow:FlxSprite;
@@ -55,6 +55,14 @@ class CastomAndroidControls extends MusicBeatState
 		menuBG.screenCenter();
 		add(menuBG);
 
+		_pad = new FlxVirtualPad(RIGHT_FULL, NONE);
+		_pad.alpha = 0;
+		add(_pad);
+
+		_hb = new Hitbox();
+		_hb.visible = false;
+		add(_hb);
+
                 var exitbutton = new FlxButton(FlxG.width - 200, 50, "Exit", function()
                 {
 			MusicBeatState.switchState(new options.OptionsState());
@@ -74,21 +82,15 @@ class CastomAndroidControls extends MusicBeatState
 		savebutton.color = FlxColor.fromRGB(0,255,0);
 		add(savebutton);
 
-		_pad = new FlxVirtualPad(RIGHT_FULL, NONE);
-		_pad.alpha = 0;
-		add(_pad);
-
-		_hb = new Hitbox();
-		_hb.visible = false;
-		add(_hb);
-
-                inputvari = new Alphabet(0, 50, controlitems[curSelected], true, false, 0.05, 0.66);
-		inputvari.screenCenter(X);
+		inputvari = new FlxText(0, 50, 0, controlitems[curSelected], 32);
+		inputvari.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+                inputvari.screenCenter(X);
+		inputvari.borderSize = 2.4;
 		add(inputvari);
 
 		var ui_tex = Paths.getSparrowAtlas('androidcontrols/menu/arrows');//thanks Andromeda Engine
 
-		leftArrow = new FlxSprite(inputvari.x - 60,inputvari.y - 10);
+		leftArrow = new FlxSprite(inputvari.x - 60, inputvari.y);
 		leftArrow.frames = ui_tex;
 		leftArrow.animation.addByPrefix('idle', "arrow left");
 		leftArrow.animation.addByPrefix('press', "arrow push left");
@@ -102,16 +104,24 @@ class CastomAndroidControls extends MusicBeatState
 		rightArrow.animation.play('idle');
 		add(rightArrow);
 
-		upPozition = new FlxText(125, 200, 0,"Button Up X:" + _pad.buttonUp.x +" Y:" + _pad.buttonUp.y, 24);
+		upPozition = new FlxText(125, 200, 0,"Button Up X:" + _pad.buttonUp.x +" Y:" + _pad.buttonUp.y, 32);
+		upPozition.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		upPozition.borderSize = 2.4;
 		add(upPozition);
 
-		downPozition = new FlxText(125, 250, 0,"Button Down X:" + _pad.buttonDown.x +" Y:" + _pad.buttonDown.y, 24);
+		downPozition = new FlxText(125, 250, 0,"Button Down X:" + _pad.buttonDown.x +" Y:" + _pad.buttonDown.y, 32);
+		downPozition.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		downPozition.borderSize = 2.4;
 		add(downPozition);
 
-		leftPozition = new FlxText(125, 300, 0,"Button Left X:" + _pad.buttonLeft.x +" Y:" + _pad.buttonLeft.y, 24);
+		leftPozition = new FlxText(125, 300, 0,"Button Left X:" + _pad.buttonLeft.x +" Y:" + _pad.buttonLeft.y, 32);
+		leftPozition.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		leftPozition.borderSize = 2.4;
 		add(leftPozition);
 
-		rightPozition = new FlxText(125, 350, 0,"Button RIght x:" + _pad.buttonRight.x +" Y:" + _pad.buttonRight.y, 24);
+		rightPozition = new FlxText(125, 350, 0,"Button RIght x:" + _pad.buttonRight.x +" Y:" + _pad.buttonRight.y, 32);
+		rightPozition.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		rightPozition.borderSize = 2.4;
 		add(rightPozition);
 
 		changeSelection();
