@@ -2040,7 +2040,10 @@ class PlayState extends MusicBeatState
 		if(ret != FunkinLua.Function_Stop) {
 	                #if android
                         androidc.visible = true;
-                        _virtualpad.visible = true;
+                        if (!inhumanSong || SONG.dodgeEnabled)
+                        {
+                                _virtualpad.visible = true;
+                        }
                         #end
 			generateStaticArrows(0);
 			generateStaticArrows(1);
@@ -5112,9 +5115,12 @@ class PlayState extends MusicBeatState
 			}
 		}
 		
-		#if android
-                androidc.visible = false;
-                _virtualpad.visible = false;
+	        #if android
+                androidc.visible = true;
+                if (!inhumanSong || SONG.dodgeEnabled)
+                {
+                        _virtualpad.visible = true;
+                }
                 #end
 		timeBarBG.visible = false;
 		timeBar.visible = false;
@@ -5714,14 +5720,17 @@ class PlayState extends MusicBeatState
 
 			//Fuck you, I added a taunt button because it's funny! -Haz
 			//FlxG.keys.justPressed.SHIFT
-			if(!inhumanSong && FlxG.keys.anyJustPressed(tauntKey) #if android || _virtualpad.buttonB.justPressed #end && !bfDodging && !controlHoldArray.contains(true) && !boyfriend.animation.curAnim.name.endsWith('miss') && boyfriend.specialAnim == false){
-				boyfriend.playAnim('hey', true);
-				boyfriend.specialAnim = true;
-				boyfriend.heyTimer = 0.59;
-				FlxG.sound.play(Paths.sound('hey'));
-				tauntCounter++;
-				trace("taunts: ",tauntCounter);
-			}
+                        if (!inhumanSong)
+                        {
+			        if(FlxG.keys.anyJustPressed(tauntKey) #if android || _virtualpad.buttonB.justPressed #end && !bfDodging && #if !android !controlHoldArray.contains(true) #end && !boyfriend.animation.curAnim.name.endsWith('miss') && boyfriend.specialAnim == false){
+				        boyfriend.playAnim('hey', true);
+				        boyfriend.specialAnim = true;
+				        boyfriend.heyTimer = 0.59;
+				        FlxG.sound.play(Paths.sound('hey'));
+				        tauntCounter++;
+				        trace("taunts: ",tauntCounter);
+			        }
+                        }
 
 			if (controlHoldArray.contains(true) && !endingSong) {
 				#if ACHIEVEMENTS_ALLOWED
