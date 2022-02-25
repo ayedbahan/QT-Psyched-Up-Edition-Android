@@ -2038,13 +2038,10 @@ class PlayState extends MusicBeatState
 		inCutscene = false;
 		var ret:Dynamic = callOnLuas('onStartCountdown', []);
 		if(ret != FunkinLua.Function_Stop) {
-	        #if android
-            androidc.visible = true;
-            if (SONG.dodgeEnabled)
-            {
-                _virtualpad.visible = true;
-            }
-            #end
+	                #if android
+                        androidc.visible = true;
+                        _virtualpad.visible = true;
+                        #end
 			generateStaticArrows(0);
 			generateStaticArrows(1);
 			for (i in 0...playerStrums.length) {
@@ -5116,13 +5113,9 @@ class PlayState extends MusicBeatState
 		}
 		
 		#if android
-        androidc.visible = false;
-        if (SONG.dodgeEnabled)
-        {
-            _virtualpad.visible = false;
-        }
-        #end
-		
+                androidc.visible = false;
+                _virtualpad.visible = false;
+                #end
 		timeBarBG.visible = false;
 		timeBar.visible = false;
 		timeTxt.visible = false;
@@ -5721,7 +5714,7 @@ class PlayState extends MusicBeatState
 
 			//Fuck you, I added a taunt button because it's funny! -Haz
 			//FlxG.keys.justPressed.SHIFT
-			if(!inhumanSong && FlxG.keys.anyJustPressed(tauntKey) && !bfDodging && !controlHoldArray.contains(true) && !boyfriend.animation.curAnim.name.endsWith('miss') && boyfriend.specialAnim == false){
+			if(!inhumanSong && FlxG.keys.anyJustPressed(tauntKey) #if android || _virtualpad.buttonB.justPressed #end && !bfDodging && !controlHoldArray.contains(true) && !boyfriend.animation.curAnim.name.endsWith('miss') && boyfriend.specialAnim == false){
 				boyfriend.playAnim('hey', true);
 				boyfriend.specialAnim = true;
 				boyfriend.heyTimer = 0.59;
