@@ -24,7 +24,7 @@ class CastomAndroidControls extends MusicBeatState
 	var leftPozition:FlxText;
 	var rightPozition:FlxText;
 
-	var inputvari:FlxText;
+	var inputvari:Alphabet;
 
 	var leftArrow:FlxSprite;
 	var rightArrow:FlxSprite;
@@ -88,15 +88,13 @@ class CastomAndroidControls extends MusicBeatState
 		savebutton.color = FlxColor.fromRGB(0,255,0);
 		add(savebutton);
 
-		inputvari = new FlxText(0, 50, FlxG.width, controlitems[curSelected], 32);
-		inputvari.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+                inputvari = new Alphabet(0, 50, controlitems[curSelected], false, false, 0.05, 0.8);
                 inputvari.screenCenter(X);
-		inputvari.borderSize = 2.4;
 		add(inputvari);
 
 		var ui_tex = Paths.getSparrowAtlas('androidcontrols/menu/arrows');//thanks Andromeda Engine
 
-		leftArrow = new FlxSprite(inputvari.x - 60, inputvari.y - 25);
+		leftArrow = new FlxSprite(inputvari.x - 60, inputvari.y);
 		leftArrow.frames = ui_tex;
 		leftArrow.animation.addByPrefix('idle', "arrow left");
 		leftArrow.animation.addByPrefix('press', "arrow push left");
@@ -159,7 +157,7 @@ class CastomAndroidControls extends MusicBeatState
 			if (curSelected >= controlitems.length)
 				curSelected = 0;
 	
-			inputvari.text = controlitems[curSelected];
+			inputvari.changeText(controlitems[curSelected]);
 
 			var daChoice:String = controlitems[Math.floor(curSelected)];
 
