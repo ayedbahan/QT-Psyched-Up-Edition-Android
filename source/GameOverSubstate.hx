@@ -94,9 +94,6 @@ class GameOverSubstate extends MusicBeatSubstate
 		camFollowPos = new FlxObject(0, 0, 1, 1);
 		camFollowPos.setPosition(FlxG.camera.scroll.x + (FlxG.camera.width / 2), FlxG.camera.scroll.y + (FlxG.camera.height / 2));
 		add(camFollowPos);
-
-                addVirtualPad(NONE, A_B);
-                addPadCamera();
 	}
 
 	var isFollowingAlready:Bool = false;
@@ -177,7 +174,14 @@ class GameOverSubstate extends MusicBeatSubstate
 	{
 		if(!textGenerated){
 			if(killedByGAMEOVER=="sawblade"){
-				killedByTextDisplay = new FlxText(boyfriend.x -48, boyfriend.y - 56, 0, "Died due to missing a sawblade. (Press space to dodge!)", 28);
+				var dodgeKey:String = InputFormatter.getKeyName(ClientPrefs.keyBinds.get('qt_dodge')[0]);
+				if(dodgeKey == "---"){
+					//If for some reason the first input is blank, tries to grab the 2nd input.
+					dodgeKey = InputFormatter.getKeyName(ClientPrefs.keyBinds.get('qt_dodge')[1]);
+				}
+				
+				//trace("DodgeKey = ",dodgeKey);
+				killedByTextDisplay = new FlxText(boyfriend.x -48, boyfriend.y - 56, 0, ("Died due to missing a sawblade. (Press " + dodgeKey + " to dodge!)"), 28);
 				killedByTextDisplay.setFormat(Paths.font("vcr.ttf"), 28, FlxColor.WHITE, CENTER);
 			}else if(killedByGAMEOVER=="hurt"){
 				killedByTextDisplay = new FlxText(boyfriend.x, boyfriend.y - 56, 0, "Died to a hurt note. (Health)", 32);
