@@ -94,7 +94,7 @@ class CastomAndroidControls extends MusicBeatState
 
 		var ui_tex = Paths.getSparrowAtlas('androidcontrols/menu/arrows');//thanks Andromeda Engine
 
-		leftArrow = new FlxSprite(inputvari.x - 60, inputvari.y);
+		leftArrow = new FlxSprite(inputvari.x - 60, inputvari.y + 100);
 		leftArrow.frames = ui_tex;
 		leftArrow.animation.addByPrefix('idle', "arrow left");
 		leftArrow.animation.addByPrefix('press', "arrow push left");
