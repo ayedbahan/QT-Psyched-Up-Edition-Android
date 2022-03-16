@@ -84,6 +84,9 @@ class CreditsState extends MusicBeatState
 			['Saw (M.A. Jigsaw)','saw','Main Coder','https://www.youtube.com/channel/UC2Sk7vtPzOvbVzdVTWrribQ','F73838'],
 			[''],
 			[''],
+			['ayed',		
+			'ayed',		'make mod ayed port',						'https://youtube.com',
+			'FFD402'],
 			['QT Mod Team'],
 			['Hazard24',			'hazard',			'Programming, Music, Charting, Animation, SFX',			'https://twitter.com/Hazard248',		'FFD402'],
 			['CountNightshade',		'nightshade',		'Art, Character Design',								'https://twitter.com/CountNightshade',	'9930BB'],
@@ -99,6 +102,7 @@ class CreditsState extends MusicBeatState
 			['SqirraRNG',			'gedehari',			'Chart Editor\'s Sound Waveform base',					'https://twitter.com/gedehari',			'FF9300'],
 			['iFlicky',				'iflicky',			'Delay/Combo Menu Song Composer\nand Dialogue Sounds',	'https://twitter.com/flicky_i',			'C549DB'],
 			['PolybiusProxy',		'polybiusproxy',	'.MP4 Video Loader Extension',							'https://twitter.com/polybiusproxy',	'FFEAA6'],
+			
 			['Keoiki',				'keoiki',			'Note Splash Animations',								'https://twitter.com/Keoiki_',			'FFFFFF'],
 			['Smokey',				'smokey',			'Spritemap Texture Support',							'https://twitter.com/Smokey_5_',		'0033CC'],
 			[''],
